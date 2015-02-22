@@ -1,0 +1,17 @@
+<?php
+/**
+ * @package NCS Framework
+ * @author Martin "Garth" Zander <garth@new-crusader.de>
+ */
+
+/**
+ * a static class Config for all global configurations
+ */
+class Config
+{
+    const DB_USERNAME = '';
+    const DB_PASSWORD = '';
+    const DB_DATABASE = '';
+
+    const DIR_APP = '/home/user/';
+}
