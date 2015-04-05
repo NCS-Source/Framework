@@ -2,17 +2,17 @@
 /**
  * MIT License
  * ===========
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,51 +20,59 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- * 
+ *
  * -----------------------------------------------------------------------
- * 
+ *
  * @author Martin "Garth" Zander <garth@new-crusader.de>
  * @license MIT License https://github.com/NCS-Source/Framework/blob/master/LICENSE
  * @package NCS Framework
  */
 
-/**
- * a static class Config for all global configurations
- */
-class Config
+namespace controller
 {
-    const DB_HOSTNAME = 'localhost';
-    const DB_USERNAME = '';
-    const DB_PASSWORD = '';
-    const DB_DATABASE = '';
-
-    const DIR_APP = '/home/user/app/';
-    const DIR_WWW = '/home/user/www/';
-
-    const FILE_ROUTER_CONFIG = 'router.json';
-
+    use core\Template;
+    
     /**
-     * load the router config file
-     *
-     * @return array
-     *
-     * @throws \InvalidArgumentException
+     * Controller class Index
+     * 
+     * @subpackage controller
      */
-    public static function loadRouterConfig()
+    class Index
     {
-        if (is_file(self::DIR_APP . self::FILE_ROUTER_CONFIG) == false) {
-            throw new \InvalidArgumentException(
-                sprintf('The file %s not exists!', self::DIR_APP . self::FILE_ROUTER_CONFIG)
+        public function __construct()
+        {}
+
+        /**
+         * default and start site
+         */
+        public function index()
+        {
+            $view = Template::getInstance();
+            $view->setTemplate('hidden');
+    
+            $view->hidden = 'index page';
+
+            $view->createContent();
+            $view->cleanVars();
+            
+            // default output
+            $view->setTemplate('content');
+
+            $view->links = array(
+                'This is the default web page for this server.',
+                'The web server software is running but no content has been added, yet.',
             );
+            $view->body = 'sorry, please try again later';
+
+            $view->createContent();
+            $view->cleanVars();
+
+            $view->setTemplate('hidden');
+
+            $view->hidden = 'the real page come later';
+
+            $view->createContent();
+            $view->cleanVars();
         }
-
-        $routes = json_decode(file_get_contents(self::DIR_APP . self::FILE_ROUTER_CONFIG), true);
-
-        if (empty($routes) == true || is_array($routes) == false) {
-            return array();
-        }
-
-        return $routes;
     }
-    const DIR_APP = '/home/user/';
 }

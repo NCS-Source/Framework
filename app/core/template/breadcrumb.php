@@ -2,17 +2,17 @@
 /**
  * MIT License
  * ===========
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,51 +20,66 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- * 
+ *
  * -----------------------------------------------------------------------
- * 
+ *
  * @author Martin "Garth" Zander <garth@new-crusader.de>
  * @license MIT License https://github.com/NCS-Source/Framework/blob/master/LICENSE
  * @package NCS Framework
  */
 
-/**
- * a static class Config for all global configurations
- */
-class Config
+namespace core\template
 {
-    const DB_HOSTNAME = 'localhost';
-    const DB_USERNAME = '';
-    const DB_PASSWORD = '';
-    const DB_DATABASE = '';
-
-    const DIR_APP = '/home/user/app/';
-    const DIR_WWW = '/home/user/www/';
-
-    const FILE_ROUTER_CONFIG = 'router.json';
+    use models\helper\Iterator;
+    use Traversable;
 
     /**
-     * load the router config file
-     *
-     * @return array
-     *
-     * @throws \InvalidArgumentException
+     * Class Breadcrumb
+     * 
+     * @subpackage core\template
      */
-    public static function loadRouterConfig()
+    class Breadcrumb implements \IteratorAggregate
     {
-        if (is_file(self::DIR_APP . self::FILE_ROUTER_CONFIG) == false) {
-            throw new \InvalidArgumentException(
-                sprintf('The file %s not exists!', self::DIR_APP . self::FILE_ROUTER_CONFIG)
-            );
+        /**
+         * @var Crumb[] $crumbs
+         */
+        private $crumbs = array();
+
+        /**
+         * @param Crumb $crumb
+         * @param bool $first
+         */
+        public function addCrumb(Crumb $crumb, $first = false)
+        {
+            if ($first == true) {
+                array_unshift($this->crumbs, $crumb);
+            } else {
+                $this->crumbs[] = $crumb;
+            }
         }
 
-        $routes = json_decode(file_get_contents(self::DIR_APP . self::FILE_ROUTER_CONFIG), true);
+        /**
+         * @return bool
+         */
+        public function hasCrumbs()
+        {
+            if (empty($this->crumbs) == false) {
+                return true;
+            }
 
-        if (empty($routes) == true || is_array($routes) == false) {
-            return array();
+            return false;
         }
-
-        return $routes;
+        
+        /**
+         * (PHP 5 &gt;= 5.0.0)<br/>
+         * Retrieve an external iterator
+         * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
+         * @return Traversable An instance of an object implementing <b>Iterator</b> or
+         * <b>Traversable</b>
+         */
+        public function getIterator()
+        {
+            return new Iterator($this->crumbs);
+        }
     }
-    const DIR_APP = '/home/user/';
 }

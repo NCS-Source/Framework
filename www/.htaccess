@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteBase /
+    RewriteCond %{REQUEST_URI} !^/images/.*$ [NC]
+    RewriteCond %{REQUEST_URI} !^/css/.*$ [NC]
+    RewriteCond %{REQUEST_URI} !^/favicon.ico$ [NC]
+    RewriteCond %{REQUEST_URI} !^/robots.txt$ [NC]
+    RewriteRule ^.*$ index.php [L]
+</IfModule>
