@@ -174,7 +174,7 @@ namespace core
         private function render()
         {
             if (file_exists(\Config::DIR_APP . 'views/' . $this->template . '.tpl.php') == false) {
-                throw new \Exception('Template not exist');
+                throw new \Exception('Template ('. $this->template . ') not exist');
             }
             
             // get all vars
