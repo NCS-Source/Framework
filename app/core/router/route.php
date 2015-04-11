@@ -63,7 +63,10 @@ namespace core\router
          * 
          * @var array
          */
-        private $filters = array();
+        private $filters = array(
+            'digit'  => '(\d+)',
+            'nondigit'  => '(\D+)',
+        );
 
         /**
          * Array containing parameters passed through request URL
@@ -105,7 +108,7 @@ namespace core\router
          */
         public function getRegex()
         {
-            return preg_replace_callback("/:(\w+)/", array(&$this, 'substituteFilter'), $this->url);
+            return preg_replace_callback("/:(\w+|\[\w+:(\w+)\])/", array(&$this, 'substituteFilter'), $this->url);
         }
 
         /**
@@ -115,10 +118,11 @@ namespace core\router
          */
         private function substituteFilter($matches)
         {
-            if (isset($matches[1]) && isset($this->filters[$matches[1]])) {
-                return $this->filters[$matches[1]];
+            if (isset($matches[2]) == true && isset($this->filters[$matches[2]]) == true) {
+                return $this->filters[$matches[2]];
             }
-            return "([\w-%]+)";
+            
+            return "([\w-%.]+)";
         }
         
         /**
