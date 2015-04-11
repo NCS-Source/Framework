@@ -1,4 +1,5 @@
 {
+    "_comment": "use a URL filter, you can set a var with :myVar, or a var with special types (see Route::filters) with :[myVar:type]",
     "routes": {
         "index": ["/", "Index::index", "GET"]
     }
